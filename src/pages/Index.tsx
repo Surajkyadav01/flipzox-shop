@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import FlipkartHeader from "@/components/FlipkartHeader";
-import CategoryBar from "@/components/CategoryBar";
 import BannerSlider from "@/components/BannerSlider";
 import ProductSection from "@/components/ProductSection";
 import BottomNav from "@/components/BottomNav";
@@ -44,7 +43,6 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background pb-16 max-w-lg mx-auto">
       <FlipkartHeader searchQuery={searchQuery} onSearchChange={setSearchQuery} />
-      <CategoryBar />
       <BannerSlider />
 
       <ProductSection title="Suggested For You" products={suggested} layout="grid" />
