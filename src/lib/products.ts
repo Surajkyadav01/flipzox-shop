@@ -1,3 +1,14 @@
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  type Unsubscribe,
+} from "firebase/firestore";
+import { db } from "./firebase";
+
 export interface Product {
   id: string;
   name: string;
@@ -5,13 +16,14 @@ export interface Product {
   originalPrice: number;
   description: string;
   imageUrl: string;
-  category: "suggested" | "featured";
+  category: "suggested" | "featured" | "deals";
   discount: number;
+  flipkartUrl?: string;
 }
 
-const STORAGE_KEY = "flipkart_products";
+const COLLECTION = "products";
 
-const defaultProducts: Product[] = [
+export const defaultProducts: Product[] = [
   {
     id: "1",
     name: "Realme P4 Lite 5G (Starry Night, 128GB)",
@@ -21,16 +33,18 @@ const defaultProducts: Product[] = [
     imageUrl: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&h=300&fit=crop",
     category: "suggested",
     discount: 28,
+    flipkartUrl: "https://www.flipkart.com",
   },
   {
     id: "2",
     name: "HP 15s Laptop Intel Core i5 12th Gen",
     price: 42990,
     originalPrice: 62790,
-    description: "8GB RAM, 512GB SSD, 15.6\" FHD Display",
+    description: '8GB RAM, 512GB SSD, 15.6" FHD Display',
     imageUrl: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300&h=300&fit=crop",
     category: "suggested",
     discount: 32,
+    flipkartUrl: "https://www.flipkart.com",
   },
   {
     id: "3",
@@ -41,6 +55,7 @@ const defaultProducts: Product[] = [
     imageUrl: "https://images.unsplash.com/photo-1603487742131-4160ec999306?w=300&h=300&fit=crop",
     category: "suggested",
     discount: 65,
+    flipkartUrl: "https://www.flipkart.com",
   },
   {
     id: "4",
@@ -51,6 +66,7 @@ const defaultProducts: Product[] = [
     imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
     category: "featured",
     discount: 67,
+    flipkartUrl: "https://www.flipkart.com",
   },
   {
     id: "5",
@@ -61,6 +77,7 @@ const defaultProducts: Product[] = [
     imageUrl: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
     category: "featured",
     discount: 44,
+    flipkartUrl: "https://www.flipkart.com",
   },
   {
     id: "6",
@@ -69,31 +86,34 @@ const defaultProducts: Product[] = [
     originalPrice: 1499,
     description: "Regular Fit, Full Sleeve, All Season",
     imageUrl: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=300&h=300&fit=crop",
-    category: "featured",
+    category: "deals",
     discount: 67,
+    flipkartUrl: "https://www.flipkart.com",
   },
 ];
 
-export function getProducts(): Product[] {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (!stored) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProducts));
-    return defaultProducts;
-  }
-  return JSON.parse(stored);
+export function subscribeProducts(callback: (products: Product[]) => void): Unsubscribe {
+  const q = query(collection(db, COLLECTION));
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const products: Product[] = snapshot.docs.map((d) => ({
+        ...(d.data() as Omit<Product, "id">),
+        id: d.id,
+      }));
+      callback(products);
+    },
+    (error) => {
+      console.error("Firestore subscription error, falling back to defaults:", error);
+      callback(defaultProducts);
+    }
+  );
 }
 
-export function addProduct(product: Omit<Product, "id">): Product {
-  const products = getProducts();
-  const newProduct: Product = { ...product, id: Date.now().toString() };
-  products.push(newProduct);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-  window.dispatchEvent(new Event("products-updated"));
-  return newProduct;
+export async function addProduct(product: Omit<Product, "id">): Promise<void> {
+  await addDoc(collection(db, COLLECTION), product);
 }
 
-export function deleteProduct(id: string): void {
-  const products = getProducts().filter((p) => p.id !== id);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-  window.dispatchEvent(new Event("products-updated"));
+export async function deleteProduct(id: string): Promise<void> {
+  await deleteDoc(doc(db, COLLECTION, id));
 }

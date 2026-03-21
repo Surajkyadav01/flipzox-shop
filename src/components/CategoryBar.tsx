@@ -1,10 +1,8 @@
-import { Smartphone, ShirtIcon, Tv, Home, Plane, ShoppingBasket } from "lucide-react";
+import { Zap, Landmark, Plane, ShoppingBasket } from "lucide-react";
 
 const categories = [
-  { name: "Mobiles", icon: Smartphone },
-  { name: "Fashion", icon: ShirtIcon },
-  { name: "Electronics", icon: Tv },
-  { name: "Home", icon: Home },
+  { name: "FlipzoX", icon: Zap },
+  { name: "Finance", icon: Landmark },
   { name: "Travel", icon: Plane },
   { name: "Grocery", icon: ShoppingBasket },
 ];
