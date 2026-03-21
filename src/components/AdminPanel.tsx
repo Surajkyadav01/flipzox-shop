@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Trash2, Plus } from "lucide-react";
-import { addProduct, getProducts, deleteProduct, type Product } from "@/lib/products";
+import { addProduct, deleteProduct, subscribeProducts, type Product } from "@/lib/products";
 
 interface Props {
   onClose: () => void;
@@ -10,7 +10,8 @@ const AdminPanel = ({ onClose }: Props) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [products, setProducts] = useState<Product[]>(getProducts());
+  const [products, setProducts] = useState<Product[]>([]);
+  const [submitting, setSubmitting] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -18,8 +19,15 @@ const AdminPanel = ({ onClose }: Props) => {
     originalPrice: "",
     description: "",
     imageUrl: "",
-    category: "suggested" as "suggested" | "featured",
+    flipkartUrl: "",
+    category: "suggested" as "suggested" | "featured" | "deals",
   });
+
+  useEffect(() => {
+    if (!authenticated) return;
+    const unsub = subscribeProducts(setProducts);
+    return unsub;
+  }, [authenticated]);
 
   const handleLogin = () => {
     if (password === "Sunil") {
@@ -30,29 +38,37 @@ const AdminPanel = ({ onClose }: Props) => {
     }
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (!form.name || !form.price) return;
+    setSubmitting(true);
     const price = Number(form.price);
     const originalPrice = Number(form.originalPrice) || price;
     const discount = originalPrice > price ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
 
-    addProduct({
-      name: form.name,
-      price,
-      originalPrice,
-      description: form.description,
-      imageUrl: form.imageUrl || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
-      category: form.category,
-      discount,
-    });
-
-    setForm({ name: "", price: "", originalPrice: "", description: "", imageUrl: "", category: "suggested" });
-    setProducts(getProducts());
+    try {
+      await addProduct({
+        name: form.name,
+        price,
+        originalPrice,
+        description: form.description,
+        imageUrl: form.imageUrl || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
+        category: form.category,
+        discount,
+        flipkartUrl: form.flipkartUrl || "https://www.flipkart.com",
+      });
+      setForm({ name: "", price: "", originalPrice: "", description: "", imageUrl: "", flipkartUrl: "", category: "suggested" });
+    } catch (err) {
+      console.error("Failed to add product:", err);
+    }
+    setSubmitting(false);
   };
 
-  const handleDelete = (id: string) => {
-    deleteProduct(id);
-    setProducts(getProducts());
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteProduct(id);
+    } catch (err) {
+      console.error("Failed to delete product:", err);
+    }
   };
 
   if (!authenticated) {
@@ -131,19 +147,27 @@ const AdminPanel = ({ onClose }: Props) => {
             onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
             className="w-full border border-border rounded-lg px-3 py-2 text-sm bg-card text-foreground outline-none focus:ring-2 focus:ring-primary/30"
           />
+          <input
+            placeholder="Flipkart Product URL"
+            value={form.flipkartUrl}
+            onChange={(e) => setForm({ ...form, flipkartUrl: e.target.value })}
+            className="w-full border border-border rounded-lg px-3 py-2 text-sm bg-card text-foreground outline-none focus:ring-2 focus:ring-primary/30"
+          />
           <select
             value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value as "suggested" | "featured" })}
+            onChange={(e) => setForm({ ...form, category: e.target.value as "suggested" | "featured" | "deals" })}
             className="w-full border border-border rounded-lg px-3 py-2 text-sm bg-card text-foreground outline-none focus:ring-2 focus:ring-primary/30"
           >
             <option value="suggested">Suggested For You</option>
             <option value="featured">Featured Brands</option>
+            <option value="deals">Best Deals</option>
           </select>
           <button
             onClick={handleAdd}
-            className="w-full bg-flipkart-green text-accent-foreground font-semibold py-2.5 rounded-lg active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+            disabled={submitting}
+            className="w-full bg-flipkart-green text-accent-foreground font-semibold py-2.5 rounded-lg active:scale-[0.98] transition-transform flex items-center justify-center gap-2 disabled:opacity-50"
           >
-            <Plus className="w-4 h-4" /> Add Product
+            <Plus className="w-4 h-4" /> {submitting ? "Adding..." : "Add Product"}
           </button>
         </div>
 

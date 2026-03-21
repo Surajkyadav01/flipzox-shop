@@ -1,55 +1,61 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import FlipkartHeader from "@/components/FlipkartHeader";
 import CategoryBar from "@/components/CategoryBar";
 import BannerSlider from "@/components/BannerSlider";
 import ProductSection from "@/components/ProductSection";
 import BottomNav from "@/components/BottomNav";
 import AdminPanel from "@/components/AdminPanel";
-import { getProducts, type Product } from "@/lib/products";
+import { subscribeProducts, defaultProducts, type Product } from "@/lib/products";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("Home");
   const [showAdmin, setShowAdmin] = useState(false);
-  const [products, setProducts] = useState<Product[]>([]);
-
-  const loadProducts = useCallback(() => {
-    setProducts(getProducts());
-  }, []);
+  const [products, setProducts] = useState<Product[]>(defaultProducts);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    loadProducts();
-    window.addEventListener("products-updated", loadProducts);
-    return () => window.removeEventListener("products-updated", loadProducts);
-  }, [loadProducts]);
+    const unsub = subscribeProducts((p) => {
+      setProducts(p.length > 0 ? p : defaultProducts);
+    });
+    return unsub;
+  }, []);
 
-  const suggested = products.filter((p) => p.category === "suggested");
-  const featured = products.filter((p) => p.category === "featured");
+  const filtered = useMemo(() => {
+    if (!searchQuery.trim()) return products;
+    const q = searchQuery.toLowerCase();
+    return products.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q)
+    );
+  }, [products, searchQuery]);
+
+  const suggested = filtered.filter((p) => p.category === "suggested");
+  const featured = filtered.filter((p) => p.category === "featured");
+  const deals = filtered.filter((p) => p.category === "deals");
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     if (tab === "Account") {
-      // Double-tap account to open admin
+      setShowAdmin(true);
     }
   };
 
   return (
     <div className="min-h-screen bg-background pb-16 max-w-lg mx-auto">
-      <FlipkartHeader />
+      <FlipkartHeader searchQuery={searchQuery} onSearchChange={setSearchQuery} />
       <CategoryBar />
       <BannerSlider />
 
       <ProductSection title="Suggested For You" products={suggested} layout="grid" />
       <ProductSection title="Featured Brands" products={featured} layout="scroll" />
+      <ProductSection title="Best Deals" products={deals} layout="grid" />
 
-      {/* Hidden admin access */}
-      <div className="flex justify-center py-6">
-        <button
-          onClick={() => setShowAdmin(true)}
-          className="text-[10px] text-muted-foreground/40 active:text-muted-foreground transition-colors"
-        >
-          Admin Access
-        </button>
-      </div>
+      {filtered.length === 0 && searchQuery && (
+        <div className="text-center py-12 text-muted-foreground text-sm">
+          No products found for "{searchQuery}"
+        </div>
+      )}
 
       <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
 

@@ -1,8 +1,14 @@
 import type { Product } from "@/lib/products";
 
 const ProductCard = ({ product }: { product: Product }) => {
+  const handleBuyNow = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const url = product.flipkartUrl || "https://www.flipkart.com";
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   return (
-    <div className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow active:scale-[0.98] transition-transform">
+    <div className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       <div className="relative aspect-square bg-muted">
         <img
           src={product.imageUrl}
@@ -28,6 +34,12 @@ const ProductCard = ({ product }: { product: Product }) => {
             </span>
           )}
         </div>
+        <button
+          onClick={handleBuyNow}
+          className="w-full mt-2 bg-flipkart-orange text-white text-xs font-bold py-2 rounded active:scale-[0.97] transition-transform"
+        >
+          Buy Now
+        </button>
       </div>
     </div>
   );
