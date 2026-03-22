@@ -109,21 +109,25 @@ const FlipkartHeader = ({ searchQuery, onSearchChange }: Props) => {
           {subCategories.map((cat) => (
             <button
               key={cat.name}
-              className="flex flex-col items-center gap-[5px] px-4 pt-2.5 pb-2 active:scale-95 transition-transform relative"
+              className="flex flex-col items-center gap-[5px] px-4 pt-2.5 pb-2.5 active:scale-95 transition-transform relative"
             >
-              <cat.icon
-                className={`w-[26px] h-[26px] ${cat.active ? "text-primary" : "text-foreground/55"}`}
-                strokeWidth={1.8}
-              />
+              <div className="relative w-[30px] h-[30px] flex items-center justify-center">
+                <cat.icon
+                  className={`w-[28px] h-[28px] ${cat.active ? "text-primary" : "text-foreground/60"}`}
+                  strokeWidth={1.6}
+                />
+                {/* Yellow accent dot */}
+                <span className="absolute -top-0.5 -right-0.5 w-[7px] h-[7px] rounded-full bg-[hsl(45,100%,55%)]" />
+              </div>
               <span
-                className={`text-[11px] font-semibold whitespace-nowrap ${
-                  cat.active ? "text-primary" : "text-foreground/50"
+                className={`text-[11.5px] font-semibold whitespace-nowrap ${
+                  cat.active ? "text-foreground" : "text-foreground/55"
                 }`}
               >
                 {cat.name}
               </span>
               {cat.active && (
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-7 h-[3px] rounded-t-full bg-primary" />
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-t-full bg-primary" />
               )}
             </button>
           ))}
