@@ -86,18 +86,17 @@ const FlipkartHeader = ({ searchQuery, onSearchChange }: Props) => {
 
         {/* Row 3: Search Bar */}
         <div className="relative flex items-center gap-2 px-3 py-2">
-          <div className="flex-1 flex items-center bg-card rounded-xl px-3.5 py-[10px] gap-3 shadow-[0_1px_6px_rgba(0,0,0,0.08)] border border-border/40 focus-within:border-primary/60 transition-colors">
-            <Search className="w-[22px] h-[22px] text-muted-foreground/50 shrink-0" strokeWidth={2.5} />
+          <div className="flex-1 flex items-center bg-card rounded-xl px-3.5 py-[9px] gap-3 border-2 border-primary/70 transition-colors">
+            <Search className="w-[20px] h-[20px] text-muted-foreground/60 shrink-0" strokeWidth={2.2} />
             <input
               type="text"
               placeholder="Search for products, brands and more"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="bg-transparent text-[15px] text-card-foreground placeholder:text-muted-foreground/45 outline-none w-full font-normal"
+              className="bg-transparent text-[14px] text-card-foreground placeholder:text-muted-foreground/50 outline-none w-full font-normal"
             />
-            <Camera className="w-[22px] h-[22px] text-muted-foreground/50 shrink-0" strokeWidth={2} />
+            <Camera className="w-[20px] h-[20px] text-muted-foreground/50 shrink-0" strokeWidth={2} />
           </div>
-          {/* QR Scanner icon outside search */}
           <button className="shrink-0 p-1.5 active:scale-95 transition-transform">
             <ScanLine className="w-6 h-6 text-foreground/60" strokeWidth={2} />
           </button>
