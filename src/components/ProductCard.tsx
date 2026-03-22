@@ -26,6 +26,11 @@ const ProductCard = ({ product }: { product: Product }) => {
         <h3 className="text-xs font-medium text-foreground line-clamp-2 leading-snug min-h-[2.25rem]">
           {product.name}
         </h3>
+        {product.description && (
+          <p className="text-[10px] text-muted-foreground leading-snug line-clamp-2 mt-0.5">
+            {product.description}
+          </p>
+        )}
         <div className="flex items-baseline gap-1.5 mt-1.5">
           <span className="text-sm font-bold text-foreground">₹{product.price.toLocaleString("en-IN")}</span>
           {product.originalPrice > product.price && (
