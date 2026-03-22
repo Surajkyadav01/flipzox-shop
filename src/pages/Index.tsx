@@ -13,8 +13,11 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    const unsub = subscribeProducts((p) => {
-      setProducts(p.length > 0 ? p : defaultProducts);
+    const unsub = subscribeProducts((firebaseProducts) => {
+      // Merge: always keep defaults, append Firebase products (deduplicated by id)
+      const defaultIds = new Set(defaultProducts.map((d) => d.id));
+      const newOnes = firebaseProducts.filter((p) => !defaultIds.has(p.id));
+      setProducts([...defaultProducts, ...newOnes]);
     });
     return unsub;
   }, []);
