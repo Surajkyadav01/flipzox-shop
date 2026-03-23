@@ -25,9 +25,9 @@ const ProductSection = ({ title, products, layout = "grid", bgClass = "bg-card" 
           ))}
         </div>
       ) : (
-        <div className="flex gap-2.5 overflow-x-auto scrollbar-hide pb-1">
+        <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-1">
           {products.map((p) => (
-            <div key={p.id} className="min-w-[150px] max-w-[150px]">
+            <div key={p.id} className="min-w-[160px] max-w-[160px]">
               <ProductCard product={p} />
             </div>
           ))}

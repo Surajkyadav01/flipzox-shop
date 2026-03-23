@@ -41,7 +41,7 @@ const ProductCard = ({ product }: { product: Product }) => {
         </div>
         <button
           onClick={handleBuyNow}
-          className="w-full mt-2 bg-flipkart-orange text-white text-xs font-bold py-2 rounded active:scale-[0.97] transition-transform"
+          className="w-full mt-auto pt-2 bg-flipkart-orange text-white text-xs font-bold py-2 rounded active:scale-[0.97] transition-transform"
         >
           Buy Now
         </button>
