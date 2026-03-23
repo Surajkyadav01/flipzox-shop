@@ -3,28 +3,28 @@ import { useState, useEffect } from "react";
 const banners = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=800&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800&h=400&fit=crop&q=80",
     title: "Smartphone Mega Sale",
     subtitle: "Up to 40% Off on Top Brands",
     badge: "LIMITED OFFER",
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=400&fit=crop&q=80",
     title: "Cooling Days",
     subtitle: "ACs & Coolers from ₹6,999",
     badge: "HOT DEAL",
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=400&fit=crop&q=80",
     title: "Fashion Bonanza",
     subtitle: "Min 50%–80% Off Top Styles",
     badge: "TRENDING",
   },
   {
     id: 4,
-    image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=800&h=400&fit=crop&q=80",
     title: "Electronics Fest",
     subtitle: "Deals Starting ₹99",
     badge: "FLASH SALE",
@@ -57,7 +57,7 @@ const BannerSlider = () => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-4">
-              <span className="inline-block bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded mb-1.5 tracking-wide shadow">
+              <span className="inline-block bg-destructive text-destructive-foreground text-[9px] font-bold px-2 py-0.5 rounded mb-1.5 tracking-wide shadow">
                 {banner.badge}
               </span>
               <h3 className="text-lg font-bold text-white drop-shadow-lg leading-tight">

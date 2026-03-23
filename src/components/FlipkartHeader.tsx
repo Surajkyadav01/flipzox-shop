@@ -1,4 +1,4 @@
-import { Search, Camera, MapPin, Smartphone, Sofa, Sparkles, ShoppingBag, Droplets, Headphones, ScanLine, Zap, IndianRupee, Plane, ShoppingCart, Shirt } from "lucide-react";
+import { Search, Camera, MapPin, Smartphone, Sofa, Sparkles, ShoppingBag, Droplets, Headphones, ScanLine, Zap, IndianRupee, Plane, ShoppingCart, Shirt, BookOpen, Dumbbell, Baby, UtensilsCrossed, Refrigerator } from "lucide-react";
 
 interface Props {
   searchQuery: string;
@@ -14,19 +14,24 @@ const subCategories = [
   { name: "Beauty", icon: Droplets, color: "hsl(340, 75%, 55%)", bg: "hsl(340, 75%, 94%)" },
   { name: "Electronics", icon: Headphones, color: "hsl(200, 80%, 45%)", bg: "hsl(200, 80%, 92%)" },
   { name: "Home", icon: Sofa, color: "hsl(25, 85%, 50%)", bg: "hsl(25, 85%, 93%)" },
+  { name: "Appliances", icon: Refrigerator, color: "hsl(170, 60%, 40%)", bg: "hsl(170, 60%, 92%)" },
+  { name: "Books", icon: BookOpen, color: "hsl(35, 80%, 45%)", bg: "hsl(35, 80%, 92%)" },
+  { name: "Furniture", icon: Sofa, color: "hsl(280, 50%, 50%)", bg: "hsl(280, 50%, 93%)" },
+  { name: "Sports", icon: Dumbbell, color: "hsl(145, 63%, 42%)", bg: "hsl(145, 63%, 92%)" },
+  { name: "Toys", icon: Baby, color: "hsl(10, 80%, 55%)", bg: "hsl(10, 80%, 93%)" },
+  { name: "Food & Health", icon: UtensilsCrossed, color: "hsl(90, 60%, 40%)", bg: "hsl(90, 60%, 92%)" },
 ];
 
 const FlipkartHeader = ({ searchQuery, onSearchChange, activeCategory, onCategoryChange }: Props) => {
   return (
     <header className="sticky top-0 z-50">
-      {/* Gradient background with palm-leaf texture overlay */}
+      {/* Gradient background */}
       <div
         className="relative"
         style={{
           background: "linear-gradient(180deg, #90caf9 0%, #bbdefb 40%, #e3f2fd 75%, #ffffff 100%)",
         }}
       >
-        {/* Subtle palm-leaf texture overlay */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -98,7 +103,7 @@ const FlipkartHeader = ({ searchQuery, onSearchChange, activeCategory, onCategor
         </div>
       </div>
 
-      {/* Row 4: Sub-Categories - Filterable */}
+      {/* Row 4: Sub-Categories - Scrollable */}
       <div className="overflow-x-auto scrollbar-hide bg-card border-b border-border/30 shadow-[0_2px_6px_rgba(0,0,0,0.06)]">
         <div className="flex min-w-max px-1">
           {subCategories.map((cat) => {
@@ -107,7 +112,7 @@ const FlipkartHeader = ({ searchQuery, onSearchChange, activeCategory, onCategor
               <button
                 key={cat.name}
                 onClick={() => onCategoryChange(cat.name)}
-                className="flex flex-col items-center gap-[6px] px-5 pt-3 pb-3 active:scale-[0.93] transition-all duration-250 relative group"
+                className="flex flex-col items-center gap-[6px] px-4 pt-3 pb-3 active:scale-[0.93] transition-all duration-250 relative group"
               >
                 <div
                   className="relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-250 shadow-sm"
@@ -123,7 +128,7 @@ const FlipkartHeader = ({ searchQuery, onSearchChange, activeCategory, onCategor
                   />
                 </div>
                 <span
-                  className="text-[11px] font-bold whitespace-nowrap transition-colors duration-200 tracking-wide"
+                  className="text-[10px] font-bold whitespace-nowrap transition-colors duration-200 tracking-wide"
                   style={{ color: isActive ? cat.color : "hsl(220, 15%, 40%)" }}
                 >
                   {cat.name}
