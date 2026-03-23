@@ -22,7 +22,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           </span>
         )}
       </div>
-      <div className="p-2.5">
+      <div className="p-2.5 flex flex-col flex-1">
         <h3 className="text-xs font-medium text-foreground line-clamp-2 leading-snug min-h-[2.25rem]">
           {product.name}
         </h3>
