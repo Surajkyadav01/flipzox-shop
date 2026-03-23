@@ -1,20 +1,22 @@
-import { Search, Camera, MapPin, IndianRupee, Plane, ShoppingCart, Heart, Shirt, Monitor, Smartphone, Sofa, Sparkles, ShoppingBag, Droplets, Headphones, ScanLine, Zap } from "lucide-react";
+import { Search, Camera, MapPin, Smartphone, Sofa, Sparkles, ShoppingBag, Droplets, Headphones, ScanLine, Zap, IndianRupee, Plane, ShoppingCart, Shirt } from "lucide-react";
 
 interface Props {
   searchQuery: string;
   onSearchChange: (query: string) => void;
+  activeCategory: string;
+  onCategoryChange: (category: string) => void;
 }
 
 const subCategories = [
-  { name: "For You", icon: ShoppingBag, active: true },
-  { name: "Fashion", icon: Shirt },
-  { name: "Mobiles", icon: Smartphone },
-  { name: "Beauty", icon: Droplets },
-  { name: "Electronics", icon: Headphones },
-  { name: "Home", icon: Sofa },
+  { name: "For You", icon: ShoppingBag, color: "hsl(218, 89%, 55%)", bg: "hsl(218, 89%, 95%)" },
+  { name: "Fashion", icon: Shirt, color: "hsl(330, 70%, 50%)", bg: "hsl(330, 70%, 94%)" },
+  { name: "Mobiles", icon: Smartphone, color: "hsl(250, 70%, 55%)", bg: "hsl(250, 70%, 94%)" },
+  { name: "Beauty", icon: Droplets, color: "hsl(340, 75%, 55%)", bg: "hsl(340, 75%, 94%)" },
+  { name: "Electronics", icon: Headphones, color: "hsl(200, 80%, 45%)", bg: "hsl(200, 80%, 92%)" },
+  { name: "Home", icon: Sofa, color: "hsl(25, 85%, 50%)", bg: "hsl(25, 85%, 93%)" },
 ];
 
-const FlipkartHeader = ({ searchQuery, onSearchChange }: Props) => {
+const FlipkartHeader = ({ searchQuery, onSearchChange, activeCategory, onCategoryChange }: Props) => {
   return (
     <header className="sticky top-0 z-50">
       {/* Gradient background with palm-leaf texture overlay */}
@@ -36,7 +38,6 @@ const FlipkartHeader = ({ searchQuery, onSearchChange }: Props) => {
         {/* Row 1: Category Cards */}
         <div className="relative px-2.5 pt-3 pb-2">
           <div className="flex items-stretch gap-2">
-            {/* FlipzoX — Blue bg card */}
             <button className="flex-1 flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl bg-primary shadow-[0_2px_10px_rgba(40,116,240,0.3)] active:scale-[0.97] transition-transform">
               <div className="w-11 h-11 rounded-full bg-secondary flex items-center justify-center shadow-sm">
                 <span className="text-primary font-extrabold text-lg leading-none">F</span>
@@ -45,24 +46,18 @@ const FlipkartHeader = ({ searchQuery, onSearchChange }: Props) => {
                 Flipzo<span className="text-[hsl(0,85%,50%)]">X</span>
               </span>
             </button>
-
-            {/* Finance */}
             <button className="flex-1 flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl bg-card shadow-[0_2px_8px_rgba(0,0,0,0.1)] active:scale-[0.97] transition-transform">
               <div className="w-11 h-11 rounded-full bg-primary flex items-center justify-center shadow-sm">
                 <IndianRupee className="w-6 h-6 text-primary-foreground" strokeWidth={2.5} />
               </div>
               <span className="text-[11px] font-bold text-foreground tracking-wide leading-none">Finance</span>
             </button>
-
-            {/* Travel */}
             <button className="flex-1 flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl bg-card shadow-[0_2px_8px_rgba(0,0,0,0.1)] active:scale-[0.97] transition-transform">
               <div className="w-11 h-11 rounded-full bg-[hsl(15,85%,55%)] flex items-center justify-center shadow-sm">
                 <Plane className="w-6 h-6 text-primary-foreground -rotate-12" strokeWidth={2.2} />
               </div>
               <span className="text-[11px] font-bold text-foreground tracking-wide leading-none">Travel</span>
             </button>
-
-            {/* Grocery */}
             <button className="flex-1 flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl bg-card shadow-[0_2px_8px_rgba(0,0,0,0.1)] active:scale-[0.97] transition-transform">
               <div className="w-11 h-11 rounded-full bg-secondary flex items-center justify-center shadow-sm">
                 <ShoppingCart className="w-5 h-5 text-foreground" strokeWidth={2.2} />
@@ -103,34 +98,44 @@ const FlipkartHeader = ({ searchQuery, onSearchChange }: Props) => {
         </div>
       </div>
 
-      {/* Row 4: Sub-Categories on white */}
+      {/* Row 4: Sub-Categories - Filterable */}
       <div className="overflow-x-auto scrollbar-hide bg-card border-b border-border/30 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
         <div className="flex min-w-max">
-          {subCategories.map((cat) => (
-            <button
-              key={cat.name}
-              className="flex flex-col items-center gap-[5px] px-4 pt-2.5 pb-2.5 active:scale-95 transition-transform relative"
-            >
-              <div className="relative w-[30px] h-[30px] flex items-center justify-center">
-                <cat.icon
-                  className={`w-[28px] h-[28px] ${cat.active ? "text-primary" : "text-foreground/60"}`}
-                  strokeWidth={1.6}
-                />
-                {/* Yellow accent dot */}
-                <span className="absolute -top-0.5 -right-0.5 w-[7px] h-[7px] rounded-full bg-[hsl(45,100%,55%)]" />
-              </div>
-              <span
-                className={`text-[11.5px] font-semibold whitespace-nowrap ${
-                  cat.active ? "text-foreground" : "text-foreground/55"
-                }`}
+          {subCategories.map((cat) => {
+            const isActive = activeCategory === cat.name;
+            return (
+              <button
+                key={cat.name}
+                onClick={() => onCategoryChange(cat.name)}
+                className="flex flex-col items-center gap-[5px] px-4 pt-2.5 pb-2.5 active:scale-95 transition-all duration-200 relative"
               >
-                {cat.name}
-              </span>
-              {cat.active && (
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-t-full bg-primary" />
-              )}
-            </button>
-          ))}
+                <div
+                  className="relative w-[34px] h-[34px] rounded-full flex items-center justify-center transition-all duration-200"
+                  style={{
+                    backgroundColor: isActive ? cat.bg : "transparent",
+                  }}
+                >
+                  <cat.icon
+                    className="w-[24px] h-[24px] transition-colors duration-200"
+                    style={{ color: isActive ? cat.color : "hsl(220, 9%, 46%)" }}
+                    strokeWidth={1.8}
+                  />
+                </div>
+                <span
+                  className="text-[11.5px] font-semibold whitespace-nowrap transition-colors duration-200"
+                  style={{ color: isActive ? cat.color : "hsl(220, 15%, 12%, 0.55)" }}
+                >
+                  {cat.name}
+                </span>
+                {isActive && (
+                  <div
+                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-t-full transition-all duration-200"
+                    style={{ backgroundColor: cat.color }}
+                  />
+                )}
+              </button>
+            );
+          })}
         </div>
       </div>
     </header>
