@@ -99,37 +99,38 @@ const FlipkartHeader = ({ searchQuery, onSearchChange, activeCategory, onCategor
       </div>
 
       {/* Row 4: Sub-Categories - Filterable */}
-      <div className="overflow-x-auto scrollbar-hide bg-card border-b border-border/30 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-        <div className="flex min-w-max">
+      <div className="overflow-x-auto scrollbar-hide bg-card border-b border-border/30 shadow-[0_2px_6px_rgba(0,0,0,0.06)]">
+        <div className="flex min-w-max px-1">
           {subCategories.map((cat) => {
             const isActive = activeCategory === cat.name;
             return (
               <button
                 key={cat.name}
                 onClick={() => onCategoryChange(cat.name)}
-                className="flex flex-col items-center gap-[5px] px-4 pt-2.5 pb-2.5 active:scale-95 transition-all duration-200 relative"
+                className="flex flex-col items-center gap-[6px] px-5 pt-3 pb-3 active:scale-[0.93] transition-all duration-250 relative group"
               >
                 <div
-                  className="relative w-[34px] h-[34px] rounded-full flex items-center justify-center transition-all duration-200"
+                  className="relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-250 shadow-sm"
                   style={{
-                    backgroundColor: isActive ? cat.bg : "transparent",
+                    backgroundColor: isActive ? cat.color : cat.bg,
+                    boxShadow: isActive ? `0 3px 12px ${cat.color}44` : "0 1px 4px rgba(0,0,0,0.06)",
                   }}
                 >
                   <cat.icon
-                    className="w-[24px] h-[24px] transition-colors duration-200"
-                    style={{ color: isActive ? cat.color : "hsl(220, 9%, 46%)" }}
-                    strokeWidth={1.8}
+                    className="w-[20px] h-[20px] transition-colors duration-200"
+                    style={{ color: isActive ? "#fff" : cat.color }}
+                    strokeWidth={2}
                   />
                 </div>
                 <span
-                  className="text-[11.5px] font-semibold whitespace-nowrap transition-colors duration-200"
-                  style={{ color: isActive ? cat.color : "hsl(220, 15%, 12%, 0.55)" }}
+                  className="text-[11px] font-bold whitespace-nowrap transition-colors duration-200 tracking-wide"
+                  style={{ color: isActive ? cat.color : "hsl(220, 15%, 40%)" }}
                 >
                   {cat.name}
                 </span>
                 {isActive && (
                   <div
-                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-t-full transition-all duration-200"
+                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-[3px] rounded-t-full transition-all duration-250"
                     style={{ backgroundColor: cat.color }}
                   />
                 )}

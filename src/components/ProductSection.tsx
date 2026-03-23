@@ -19,7 +19,7 @@ const ProductSection = ({ title, products, layout = "grid", bgClass = "bg-card" 
         <ArrowRight className="w-5 h-5 text-muted-foreground" />
       </div>
       {layout === "grid" ? (
-        <div className="grid grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {products.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}

@@ -72,7 +72,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-16 w-full max-w-2xl mx-auto">
+    <div className="min-h-screen bg-background pb-16 w-full max-w-[1200px] mx-auto">
       <FlipkartHeader
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
