@@ -8,7 +8,7 @@ const ProductCard = ({ product }: { product: Product }) => {
   };
 
   return (
-    <div className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
       <div className="relative aspect-square bg-muted">
         <img
           src={product.imageUrl}
@@ -22,7 +22,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           </span>
         )}
       </div>
-      <div className="p-2.5">
+      <div className="p-2.5 flex flex-col flex-1">
         <h3 className="text-xs font-medium text-foreground line-clamp-2 leading-snug min-h-[2.25rem]">
           {product.name}
         </h3>
@@ -41,7 +41,7 @@ const ProductCard = ({ product }: { product: Product }) => {
         </div>
         <button
           onClick={handleBuyNow}
-          className="w-full mt-2 bg-flipkart-orange text-white text-xs font-bold py-2 rounded active:scale-[0.97] transition-transform"
+          className="w-full mt-auto pt-2 bg-flipkart-orange text-white text-xs font-bold py-2 rounded active:scale-[0.97] transition-transform"
         >
           Buy Now
         </button>
