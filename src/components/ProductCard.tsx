@@ -8,7 +8,7 @@ const ProductCard = ({ product }: { product: Product }) => {
   };
 
   return (
-    <div className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
       <div className="relative aspect-square bg-muted">
         <img
           src={product.imageUrl}
